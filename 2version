@@ -1,0 +1,129 @@
+using System;
+
+namespace RestaurantFinanceManagementSystem
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Restaurant restaurant = new Restaurant();
+            Employee cashier = new Employee("John", "Doe", "Cashier");
+            restaurant.AddEmployee(cashier);
+            Product burger = new Product("Burger", 5.0);
+            Product sandwich = new Product("sandwich", 4.0);
+            Product fish_and_chips = new Product("fish_and_chips", 3.0);
+            restaurant.AddProduct(burger);
+            restaurant.AddProduct(sandwich);
+            restaurant.AddProduct(fish_and_chips);
+            Order order1 = new Order(cashier, new Product[] { burger });
+            Order order2 = new Order(cashier, new Product[] { sandwich });
+            Order order3 = new Order(cashier, new Product[] { fish_and_chips });
+            restaurant.AddOrder(order1);
+            restaurant.AddOrder(order2);
+            restaurant.AddOrder(order3);
+            Console.WriteLine("Total revenue: " + restaurant.CalculateTotalRevenue());
+            Console.WriteLine("Net income: " + restaurant.CalculateNetIncome());
+        }
+    }
+
+    public class Restaurant
+    {
+        private double income;
+        private double expenses;
+        private Employee[] employees;
+        private Product[] products;
+        private Order[] orders;
+
+        public Restaurant()
+        {
+            employees = new Employee[0];
+            products = new Product[0];
+            orders = new Order[0];
+        }
+
+        public void AddEmployee(Employee employee)
+        {
+            Array.Resize(ref employees, employees.Length + 1);
+            employees[employees.Length - 1] = employee;
+        }
+
+        public void AddProduct(Product product)
+        {
+            Array.Resize(ref products, products.Length + 1);
+            products[products.Length - 1] = product;
+        }
+
+        public void AddOrder(Order order)
+        {
+            Array.Resize(ref orders, orders.Length + 1);
+            orders[orders.Length - 1] = order;
+            income += order.TotalPrice;
+        }
+
+        public double CalculateTotalRevenue()
+        {
+            return income;
+        }
+
+        public void AddExpense(double amount)
+        {
+            expenses += amount;
+        }
+
+        public double CalculateNetIncome()
+        {
+            return income - expenses;
+        }
+    }
+
+    public class Employee
+    {
+        public string FirstName { get; }
+        public string LastName { get; }
+        public string Role { get; }
+
+        public Employee(string firstName, string lastName, string role)
+        {
+            FirstName = firstName;
+            LastName = lastName;
+            Role = role;
+        }
+    }
+
+    public class Product
+    {
+        public string Name { get; }
+        public double Price { get; }
+
+        public Product(string name, double price)
+        {
+            Name = name;
+            Price = price;
+        }
+    }
+
+    public class Order
+    {
+        public Employee Cashier { get; }
+        public Product[] Products { get; }
+
+        public double TotalPrice
+        {
+            get
+            {
+                double total = 0.0;
+                foreach (Product product in Products)
+                {
+                    total += product.Price;
+                }
+                return total;
+            }
+        }
+
+        public Order(Employee cashier, Product[] products)
+        {
+            Cashier = cashier;
+            Products = products;
+        }
+    }
+}
