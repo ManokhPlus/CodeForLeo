@@ -12,24 +12,51 @@ namespace RestaurantFinanceManagementSystem
             Product burger = new Product("Burger", 5.0);
             Product sandwich = new Product("sandwich", 4.0);
             Product fish_and_chips = new Product("fish_and_chips", 3.0);
+            Product chips_with_cheese = new Product("chips_with_cheese", 2.5);
+            Product gyros = new Product("gyros", 10.0);
+            Product сaesar_salad = new Product("сaesar_salad", 10.0);
+            Product french_fries = new Product("french_fries", 2.5);
+            Product sprite = new Product("sprite", 2.0);
             restaurant.AddProduct(burger);
             restaurant.AddProduct(sandwich);
             restaurant.AddProduct(fish_and_chips);
-            Order order1 = new Order(cashier, new Product[] { burger });
-            Order order2 = new Order(cashier, new Product[] { sandwich });
-            Order order3 = new Order(cashier, new Product[] { fish_and_chips });
-            restaurant.AddOrder(order1);
-            restaurant.AddOrder(order2);
-            restaurant.AddOrder(order3);
-            Console.WriteLine("Total revenue: " + restaurant.CalculateTotalRevenue());
-            Console.WriteLine("Net income: " + restaurant.CalculateNetIncome());
+            restaurant.AddProduct(chips_with_cheese);
+            restaurant.AddProduct(gyros);
+            restaurant.AddProduct(сaesar_salad);
+            restaurant.AddProduct(french_fries);
+            restaurant.AddProduct(sprite);
+            for (int i = 0; i < 120; i++)
+            {
+                Order order = new Order(cashier, new Product[] { burger });
+                Order order2 = new Order(cashier, new Product[] { sandwich });
+                Order order3 = new Order(cashier, new Product[] { fish_and_chips });
+                Order order4 = new Order(cashier, new Product[] { chips_with_cheese });
+                Order order5 = new Order(cashier, new Product[] { gyros });
+                Order order6 = new Order(cashier, new Product[] { сaesar_salad });
+                Order order7 = new Order(cashier, new Product[] { french_fries });
+                Order order8 = new Order(cashier, new Product[] { sprite });
+                restaurant.AddOrder(order);
+                restaurant.AddOrder(order2);
+                restaurant.AddOrder(order3);
+                restaurant.AddOrder(order4);
+                restaurant.AddOrder(order5);
+                restaurant.AddOrder(order6);
+                restaurant.AddOrder(order7);
+                restaurant.AddOrder(order8);
+            }
+            double revenue = restaurant.CalculateTotalRevenue();
+            double expenses = restaurant.CalculateTotalExpenses();
+            Console.WriteLine("Total revenue: " + revenue);
+            Console.WriteLine("Total expenses: " + expenses);
+            Console.WriteLine("Net income: " + restaurant.CalculateNetIncome(revenue, expenses));
+            Console.WriteLine("Monthly net income: " + restaurant.CalculateMonthlyNetIncome(revenue, expenses, 50));
         }
     }
 
     public class Restaurant
     {
         private double income;
-        private double expenses;
+        public double expenses;
         private Employee[] employees;
         private Product[] products;
         private Order[] orders;
@@ -45,6 +72,7 @@ namespace RestaurantFinanceManagementSystem
         {
             Array.Resize(ref employees, employees.Length + 1);
             employees[employees.Length - 1] = employee;
+            expenses += employee.Salary;
         }
 
         public void AddProduct(Product product)
@@ -70,9 +98,24 @@ namespace RestaurantFinanceManagementSystem
             expenses += amount;
         }
 
-        public double CalculateNetIncome()
+        public double CalculateTotalExpenses()
         {
-            return income - expenses;
+            double total = 0.0;
+            foreach (Employee employee in employees)
+            {
+                total += employee.Salary;
+            }
+            return total;
+        }
+
+        public double CalculateNetIncome(double revenue, double expenses)
+        {
+            return revenue - expenses;
+        }
+
+        public double CalculateMonthlyNetIncome(double revenue, double expenses, int ordersPerDay)
+        {
+            return CalculateNetIncome(revenue, expenses) * 30 - employees.Length * 8 * 20 * ordersPerDay * products.Length;
         }
     }
 
@@ -81,12 +124,14 @@ namespace RestaurantFinanceManagementSystem
         public string FirstName { get; }
         public string LastName { get; }
         public string Role { get; }
+        public double Salary { get; }
 
         public Employee(string firstName, string lastName, string role)
         {
             FirstName = firstName;
             LastName = lastName;
             Role = role;
+            Salary = 2000.0;
         }
     }
 
@@ -127,3 +172,5 @@ namespace RestaurantFinanceManagementSystem
         }
     }
 }
+
+
