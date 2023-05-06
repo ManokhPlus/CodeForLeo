@@ -25,7 +25,7 @@ namespace RestaurantFinanceManagementSystem
             restaurant.AddProduct(сaesar_salad);
             restaurant.AddProduct(french_fries);
             restaurant.AddProduct(sprite);
-            for (int i = 0; i < 120; i++)
+            for (int i = 0; i < 60; i++)
             {
                 Order order = new Order(cashier, new Product[] { burger });
                 Order order2 = new Order(cashier, new Product[] { sandwich });
@@ -49,7 +49,7 @@ namespace RestaurantFinanceManagementSystem
             Console.WriteLine("Total revenue: " + revenue);
             Console.WriteLine("Total expenses: " + expenses);
             Console.WriteLine("Net income: " + restaurant.CalculateNetIncome(revenue, expenses));
-            Console.WriteLine("Monthly net income: " + restaurant.CalculateMonthlyNetIncome(revenue, expenses, 50));
+            Console.WriteLine("Monthly net income: " + restaurant.CalculateMonthlyNetIncome(revenue, expenses, 1));
         }
     }
 
@@ -113,9 +113,9 @@ namespace RestaurantFinanceManagementSystem
             return revenue - expenses;
         }
 
-        public double CalculateMonthlyNetIncome(double revenue, double expenses, int ordersPerDay)
+        public double CalculateMonthlyNetIncome(double revenue, double expenses, int ordersPerMounth)
         {
-            return CalculateNetIncome(revenue, expenses) * 30 - employees.Length * 8 * 20 * ordersPerDay * products.Length;
+            return CalculateNetIncome(revenue, expenses) * 30 - employees.Length * 8 * 20 * ordersPerMounth * products.Length;
         }
     }
 
@@ -172,5 +172,3 @@ namespace RestaurantFinanceManagementSystem
         }
     }
 }
-
-
